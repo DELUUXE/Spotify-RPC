@@ -1,3 +1,5 @@
+# project discontinued due to discord releasing native support for spotify
+
 # Spotify RPC `1.2.5 ` forked from spoticord `0.0.4` 
 **Display your current Spotify song on Discord using the RPC API:**
 ![N|Solid](https://i.imgur.com/E3DIjV2.png?1)
