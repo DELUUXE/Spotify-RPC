@@ -1,6 +1,6 @@
 # spoticord `0.0.4` FORKED TO Spotify RPC `1.2.5 `
 **Display your current Spotify song on Discord using the RPC API:**
-![N|Solid](https://s.phineas.io/share/68747470733acx.png)
+![N|Solid](https://gyazo.com/dc3bc36f8384982270d3053416048f66)
 
 ## How to install
 
