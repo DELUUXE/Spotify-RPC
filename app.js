@@ -1,26 +1,77 @@
 const { Client } = require('discord-rpc'),
       spotifyWeb = require('./spotify'),
-      log = require("fancy-log"),
+      /*log = require("fancy-log"),*/
       events = require('events'),
       fs = require('fs'),
       r = require('request'),
       keys = require('./keys.json');
+const electron = require('electron');
+const {Menu, Tray} = require('electron');
+const BrowserWindow = electron.BrowserWindow;
+const app = electron.app;
+const path = require('path');
+var log = require('electron-log');
+config = require('./config.json');
 
-/**
- * Check if user is blocking open.spotify.com before establishing RPC connection
- * Works only on Linux based systems that use /etc/hosts, if a rule exist, the
- * user will be in loop of ECONNRESET [changed address]:80 or recieve false data.
- **/
-function checkHosts(file) {
-  if (file.includes("open.spotify.com")) throw new Error("Arr' yer be pirating, please remove \"open.spotify.com\" rule from your hosts file.");
-}
-if (process.platform !== "win32" && fs.existsSync("/etc/hosts")) {
-  checkHosts(fs.readFileSync("/etc/hosts", "utf-8"));
-}
+log.transports.file.appName = 'SpotifyRPC';
+log.transports.file.level = 'info';
+log.transports.file.format = '{h}:{i}:{s}:{ms} {text}';
+log.transports.file.maxSize = 5 * 1024 * 1024;
+log.transports.file.file = __dirname + '/log.txt';
+log.transports.file.streamConfig = { flags: 'w' };
+log.transports.file.stream = fs.createWriteStream('log.txt');
+
+//------------------ CUSTOM ARTISTS ------------------\\
+//Custom artist pictures
+const imageKey = "spotify";
+const imageText = "Spotify Premium";
+const imageKeyAG = "arianagrande";
+const imageTextAG = "Ariana Grande";
+const imageKeyDL = "dualipa";
+const imageTextDL = "Dua Lipa";
+const imageKeyMM = "marshmello";
+const imageTextMM = "Marshmello";
+const imageKeyWK = "wildcard";
+const imageTextWK = "Wildcard - KSHMR";
+const imageKeyB = "bausa";
+const imageTextB = "Was Du Liebe nennst - Bausa";
+const imageKeygld = "gld";
+const imageTextgld = "Girls Love DJs";
+const imageKeyFR = "florida";
+const imageTextFR = "Flo Rida";
+const imageKeyID = "id";
+const imageTextID = "Imagine Dragons";
+const imageKeyKP = "katyperry";
+const imageTextKP = "Katy Perry";
+const imageKeyRS = "robinschulz";
+const imageTextRS = "Robin Schulz";
+const imageKeyBR = "beberexha";
+const imageTextBR = "Bebe Rexha";
+const imageKeyHS = "hs";
+const imageTextHS = "Hailee Steinfeld";
+const imageKeyS = "slushii";
+const imageTextS = "Slushii";
+const imageKeyQ = "queen";
+const imageTextQ = "Queen";
+const imageKeyTS = "taylorswift";
+const imageTextTS = "Taylor Swift";
+const imageKeySG = "selenagomez";
+const imageTextSG = "Selena Gomez";
+const imageKeyA = "avicii";
+const imageTextA = "Avicii";
+const imageKeyD = "disclosure";
+const imageTextD = "Disclosure";
+const imageKeyGE = "geasy";
+const imageTextGE = "G-Eazy";
+const imageKeyN = "neffex";
+const imageTextN = "Neffex";
+const imageKeyTN = "xxxtentacion";
+const imageTextTN = "XXXTENTACION";
+//-------------------END CUSTOM ARTISTS----------------\\
 
 const rpc = new Client({ transport: keys.rpcTransportType }),
       s = new spotifyWeb.SpotifyWebHelper(),
-      appClient = keys.appClientID,
+      appClient = "386180473702973461",
       largeImageKey = keys.imageKeys.large,
       smallImageKey = keys.imageKeys.small,
       smallImagePausedKey = keys.imageKeys.smallPaused;
@@ -103,21 +154,250 @@ const updateSpoticordOuterscope = (song) => {
  * songUpdate: currently gets executed when the song gets paused/resumes playing.
  **/
 songEmitter.on('newSong', song => {
-  rpc.setActivity({
-    details: `🎵  ${song.name}`,
-    state: `👤  ${song.artist}`,
-    startTimestamp: song.start,
-    endTimestamp: song.end,
-    largeImageKey,
-    smallImageKey,
-    largeImageText: `⛓  ${song.uri}`,
-    smallImageText: `💿  ${song.album}`,
-    instance: false,
-  });
-
+  if (song.artist == "Taylor Swift"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyTS,
+      smallImageKey,
+      largeImageText: imageTextTS,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Ariana Grande"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyAG,
+      smallImageKey,
+      largeImageText: imageTextAG,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Dua Lipa"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyDL,
+      smallImageKey,
+      largeImageText: imageTextDL,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Marshmello"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyMM,
+      smallImageKey,
+      largeImageText: imageTextMM,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "gld"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeygld,
+      smallImageKey,
+      largeImageText: imageTextgld,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Hailee Steinfeld"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyHS,
+      smallImageKey,
+      largeImageText: imageTextHS,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Flo Rida"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyFR,
+      smallImageKey,
+      largeImageText: imageTextFR,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Imagine Dragons"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyID,
+      smallImageKey,
+      largeImageText: imageTextID,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Katy Perry"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyKP,
+      smallImageKey,
+      largeImageText: imageTextKP,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Robin Schulz"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyRS,
+      smallImageKey,
+      largeImageText: imageTextRS,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Bebe Rexha"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyBR,
+      smallImageKey,
+      largeImageText: imageTextBR,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Slushii"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyS,
+      smallImageKey,
+      largeImageText: imageTextS,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Queen"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyQ,
+      smallImageKey,
+      largeImageText: imageTextQ,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Selena Gomez"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeySG,
+      smallImageKey,
+      largeImageText: imageTextSG,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Avicii"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyA,
+      smallImageKey,
+      largeImageText: imageTextA,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Disclosure"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyD,
+      smallImageKey,
+      largeImageText: imageTextD,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "G-Eazy"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyGE,
+      smallImageKey,
+      largeImageText: imageTextGE,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "Neffex"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyN,
+      smallImageKey,
+      largeImageText: imageTextN,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else if (song.artist == "XXXTENTACION"){
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey: imageKeyTN,
+      smallImageKey,
+      largeImageText: imageTextTN,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  } else {
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp: song.start,
+      endTimestamp: song.end,
+      largeImageKey,
+      smallImageKey: "play_button_clean",
+      largeImageText: `Spotify Premium`,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  }
   if(keys.shareAnonAnalytics) updateSpoticordOuterscope(song);
 
-  log(`Updated song to: ${song.artist} - ${song.name}`);
+  log.info(`Updated song to: ${song.artist} - ${song.name}`);
 });
 
 songEmitter.on('songUpdate', song => {
@@ -127,25 +407,55 @@ songEmitter.on('songUpdate', song => {
     endTimestamp = song.playing ?
     startTimestamp + song.length :
     undefined;
-
-  rpc.setActivity({
-    details: `🎵  ${song.name}`,
-    state: `👤  ${song.artist}`,
-    startTimestamp,
-    endTimestamp,
-    largeImageKey,
-    smallImageKey: startTimestamp ? smallImageKey : smallImagePausedKey,
-    largeImageText: `⛓  ${song.uri}`,
-    smallImageText: `💿  ${song.album}`,
-    instance: false,
-  });
-
-  log(`Song state updated (playing: ${song.playing})`)
+    rpc.setActivity({
+      details: `🎵  ${song.name}`,
+      state: `👤  ${song.artist}`,
+      startTimestamp,
+      endTimestamp,
+      largeImageKey,
+      smallImageKey: startTimestamp ? "play_button_clean" : smallImagePausedKey,
+      largeImageText: `Spotify Premium`,
+      smallImageText: `💿  ${song.album}`,
+      instance: false,
+    });
+  log.info(`Song state updated (playing: ${song.playing})`)
 });
 
 rpc.on('ready', () => {
-    log(`Connected to Discord! (${appClient})`);
+    log.info(`Connected to Discord! (${appClient})`);
     global.intloop = setInterval(checkSpotify, 1500);
 });
 
-rpc.login(appClient).catch(log.error);
+//when the program is succesfully started
+app.on('ready', function () {
+  log.info("SpotifyRPC is starting...");
+  //show splash/loading screen
+  let win = new BrowserWindow({width: 1000, height: 600, frame: false});
+  win.loadURL(path.join('file://', __dirname, '/main.html'));
+  //makes tray icon for closing and managing the program
+  tray = new Tray(path.join(__dirname, '/img/spotify.ico'));
+  const contextMenu = Menu.buildFromTemplate([
+      {label: 'Settings'},
+      {label: 'Close'},
+  ]);
+  tray.setToolTip('Spotify RPC (click to close)');
+  //tray.setContextMenu(contextMenu);
+  /*tray.on('ContextMenu-show', () => {
+    log.info("Clicked context menu");
+  });*/
+  tray.on('click', () => {
+    log.info("Closing SpotifyRPC");
+    let thxwin = new BrowserWindow({width: 1000, height: 600, frame: false});
+    thxwin.loadURL(path.join('file://', __dirname, '/thx.html'));
+    tray.destroy();
+    setTimeout(function() {
+      app.exit();
+    }, 5000);
+  });
+  setTimeout(function() {
+    win.hide();
+    //login to RPC
+    rpc.login(appClient).catch(log.error);
+  }, 6000);
+});
+
